@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Scrape</title>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <!-- Moment.js -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.16.0/moment.min.js"></script>
+
+    <!--font-->
+    <link href="https://fonts.googleapis.com/css?family=Cantata+One" rel="stylesheet">
+
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+    <style>
+        body {
+            height: 800px;
+        }
+        #background {
+            background-image: url("img/scapeBg.png");
+            height: 800px;
+
+        }
+
+        #lowerBg {
+            background-color: #e57373;
+        }
+
+        .nav-wrapper  {
+            color:#3e2723;
+            margin-left: 15px;
+            /*font-family: 'Cantata One', serif;*/
+        }
+
+       #text {
+           font-size: 80px;
+           color: white;
+           margin-top: 450px;
+           font-family: 'Cantata One', serif;
+       }
+
+        #articles {
+            display: inline-block;
+            overflow: auto;
+            width: 80%;
+            /*margin-top: 100px;*/
+            height: 200px;
+        }
+        #notes {
+            float: right;
+            width: 30%;
+            margin-top: 100px;
+            height: 200px;
+            font-size: 12px;
+        }
+        textarea, input {
+            display: block;
+            width: 100%;
+            background-color: #FCF5C7;
+        }
+        input {
+            height: 36px;
+            font-size: 24px;
+        }
+        textarea {
+            height: 200px;
+            font-size: 18px;
+        }
+
+        h2 {
+            margin-left: 150px;
+            font-family: 'Cantata One', serif;
+            color: white;
+        }
+
+        /*!*#artDiv {*!*/
+            /*background-color: white;*/
+
+        /*}*/
+
+
+
+    </style>
+
+</head>
+
+<body>
+<nav class=" brown darken-4">
+    <div class="nav-wrapper z-depth-5">
+        <div id="navPosition ">
+            <a id="logo-container " href="/" class="brand-logo">The Huffington Post Scraper</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/articles">Home</a></li>
+                <li><a href="/notes">Saved Articles</a></li>
+                <li><a class="btn modal-trigger red lighten-2" data-target="newArticles" href="#" id="scrapeButton">Scrape New Articles</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div id="background">
+    <div class="row z-depth-5">
+        <div class="col s12 center" id="text">Mongo Scraper</div>
+    </div>
+</div>
+
+
+<div id="lowerBg">
+    <div id="artDiv">
+        <h2>Articles</h2>
+    <div id="articles"></div>
+    </div>
+    <div id="notes"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
