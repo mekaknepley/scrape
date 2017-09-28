@@ -8,7 +8,9 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 // Requiring our Note and Article models
 var Note = require("./models/Note.js");
-var Article = require("./models/Article.js");
+var ArticleTypes = require("./models/Article.js");
+var Article = ArticleTypes.article;
+var SavedArticle = ArticleTypes.savedArticle;
 // Our scraping tools
 var request = require("request");
 var cheerio = require("cheerio");
@@ -64,25 +66,36 @@ app.get("/scrape", function(req, res) {
             if ($(this).children("a").attr("href") != undefined) {
                 // Add the text and href of every link, and save them as properties of the result object
                 result.title = $(this).find("a").text();
-                var linkStart = "http://www.huffingtonpost.com/section/us-news";
+                var linkStart = "http://www.huffingtonpost.com";
                 result.link = linkStart + $(this).children("a").attr("href").toString();
 
                 results.push(result);
 
-                // Using our Article model, create a new entry
-                // This effectively passes the result object to the entry (and the title and link)
-                var entry = new Article(result);
+                request(result.link, function(error, response, html) {
 
-                // Now, save that entry to the db
-                entry.save(function (err, doc) {
-                    // Log any errors
-                    if (err) {
-                        console.log(err);
-                    }
-                    // Or log the doc
-                    else {
-                        console.log(doc);
-                    }
+                    //console.log(html);
+
+                    // Then, we load that into cheerio and save it to $ for a shorthand selector
+                    var $ = cheerio.load(html);
+                    result.summary = $(".headline__subtitle").text();
+
+                    //console.log(result.summary);
+
+                    // Using our Article model, create a new entry
+                    // This effectively passes the result object to the entry (and the title and link)
+                    var entry = new Article(result);
+
+                    // Now, save that entry to the db
+                    entry.save(function (err, doc) {
+                        // Log any errors
+                        if (err) {
+                            console.log(err);
+                        }
+                        // Or log the doc
+                        else {
+                            //console.log(doc);
+                        }
+                    });
                 });
             }
         });
@@ -106,6 +119,10 @@ app.get("/articles", function(req, res) {
             res.json(doc);
         }
     });
+});
+
+app.get("/save/:id", function(req, res) {
+
 });
 
 // Grab an article by it's ObjectId

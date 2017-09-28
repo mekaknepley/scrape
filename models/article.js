@@ -10,6 +10,9 @@ var ArticleSchema = new Schema({
         type: String,
         required: true
     },
+    summary: {
+        type: String
+    },
     // link is a required string
     link: {
         type: String,
@@ -25,6 +28,7 @@ var ArticleSchema = new Schema({
 
 // Create the Article model with the ArticleSchema
 var Article = mongoose.model("Article", ArticleSchema);
+var SavedArticle = mongoose.model("SavedArticle", ArticleSchema);
 
 // Export the model
-module.exports = Article;
+module.exports = {article: Article, savedArticle: SavedArticle};
