@@ -31,7 +31,8 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/scrape");
+//mongoose.connect("mongodb://localhost/scrape");
+mongoose.connect("mongodb://heroku_37d6flj3:5742v17f606k180rd3pe7tu3o7@ds155644.mlab.com:55644/heroku_37d6flj3");
 var db = mongoose.connection;
 
 // Show any mongoose errors
@@ -225,6 +226,6 @@ router.post("/articles/:id", function(req, res) {
 app.use("/", router);
 
 // Listen on port 3005
-app.listen(3005, function() {
+app.listen(process.env.PORT || 3005, function() {
     console.log("App running on port 3005!");
 });
