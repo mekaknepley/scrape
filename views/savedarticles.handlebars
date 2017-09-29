@@ -1,0 +1,33 @@
+<nav class=" brown darken-4">
+    <div class="nav-wrapper z-depth-5">
+        <div id="navPosition ">
+            <a id="logo-container " href="/" class="brand-logo">The Huffington Post Scraper</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/">Home</a></li>
+                <li><a href="/saved">Saved Articles</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div id="background">
+    <div class="row z-depth-5">
+        <div class="col s12 center" id="text">Saved Articles</div>
+    </div>
+</div>
+
+
+<div id="lowerBg">
+    <div id="artDiv">
+        <h2>Saved Articles</h2>
+        <div id="articles">
+            {{#each articles}}
+                <p data-id='{{_id}}'>{{title}}<br />{{summary}}<br />{{link}}
+                    <button data-id='{{_id}}' class="deleteArticle">Delete This Article</button>
+                </p>
+            {{/each}}
+        </div>
+    </div>
+    <div id="notes"></div>
+</div>

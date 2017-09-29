@@ -44,12 +44,31 @@ db.once("open", function() {
     console.log("Mongoose connection successful.");
 });
 
+// Set Handlebars.
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Routes
 // ======
+var router = express.Router();
+
+router.get("/", function (req, res) {
+    // Grab every doc in the Articles array
+    Article.find({}, function(error, doc) {
+        res.render("articles", {articles: doc});
+    });
+});
+
+router.get("/saved", function (req, res) {
+    SavedArticle.find({}, function(error, doc) {
+        res.render("savedarticles", {articles: doc});
+    });
+});
 
 // A GET request to scrape the echojs website
-app.get("/scrape", function(req, res) {
+router.get("/scrape", function(req, res) {
     // First, we grab the body of the html with request
     request("http://www.huffingtonpost.com/section/us-news", function(error, response, html) {
 
@@ -107,7 +126,7 @@ app.get("/scrape", function(req, res) {
 });
 
 // This will get the articles we scraped from the mongoDB
-app.get("/articles", function(req, res) {
+router.get("/articles", function(req, res) {
     // Grab every doc in the Articles array
     Article.find({}, function(error, doc) {
         // Log any errors
@@ -121,12 +140,40 @@ app.get("/articles", function(req, res) {
     });
 });
 
-app.get("/save/:id", function(req, res) {
+router.get("/save/:id", function(req, res) {
+    Article.findOne({ "_id": req.params.id })
+        .exec(function(error, doc) {
+            var result = {};
+            result.title = doc.title;
+            result.link = doc.link;
+            result.summary = doc.summary;
+            var entry = new SavedArticle(result);
 
+            // Now, save that entry to the db
+            entry.save(function (err, doc) {
+                // Log any errors
+                if (err) {
+                    console.log(err);
+                }
+                // Or log the doc
+                else {
+                    //console.log(doc);
+                    res.json(doc);
+                }
+            });
+        });
+});
+
+router.get("/delete/:id", function(req, res) {
+   SavedArticle.remove({ "_id": req.params.id })
+       .exec(function(error, doc) {
+           console.log("deleted " + req.params.id);
+           res.json(doc);
+       });
 });
 
 // Grab an article by it's ObjectId
-app.get("/articles/:id", function(req, res) {
+router.get("/articles/:id", function(req, res) {
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     Article.findOne({ "_id": req.params.id })
     // ..and populate all of the notes associated with it
@@ -146,7 +193,7 @@ app.get("/articles/:id", function(req, res) {
 
 
 // Create a new note or replace an existing note
-app.post("/articles/:id", function(req, res) {
+router.post("/articles/:id", function(req, res) {
     // Create a new note and pass the req.body to the entry
     var newNote = new Note(req.body);
 
@@ -175,6 +222,7 @@ app.post("/articles/:id", function(req, res) {
     });
 });
 
+app.use("/", router);
 
 // Listen on port 3005
 app.listen(3005, function() {
