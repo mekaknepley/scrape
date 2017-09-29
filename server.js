@@ -7,8 +7,8 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 // Requiring our Note and Article models
-var Note = require("./models/Note.js");
-var ArticleTypes = require("./models/Article.js");
+var Note = require("./models/note.js");
+var ArticleTypes = require("./models/article.js");
 var Article = ArticleTypes.article;
 var SavedArticle = ArticleTypes.savedArticle;
 // Our scraping tools
